@@ -23,12 +23,17 @@ public class Player {
     Wall[] walls;
     Graf notLinkedPoint;
 
+    void play(){
+
+    }
+
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
         Player game = new Player();
         game.initGame(in);
         while (true) {
             game.updateGame(in);
+            game.play();
         }
     }
 
@@ -39,6 +44,7 @@ public class Player {
         myId = in.nextInt(); // id of my player (0 = 1st player, 1 = 2nd player, ...)
         players = new Unit[playerCount];
         Arrays.fill(players,new Unit());
+        notLinkedPoint  = new Graf();
     }
 
     void updateGame(Scanner in){
@@ -58,6 +64,13 @@ public class Player {
             int wallY = in.nextInt(); // y-coordinate of the wall
             String wallOrientation = in.next(); // wall orientation ('H' or 'V')
             walls[i] = new Wall(new Point(wallX,wallY),wallOrientation);
+            if(wallOrientation == WALL_V) {
+                notLinkedPoint.addEdge(new Point(wallX, wallY), new Point(wallX-1, wallY));
+                notLinkedPoint.addEdge(new Point(wallX, wallY+1), new Point(wallX-1, wallY+1));
+            }else{
+                notLinkedPoint.addEdge(new Point(wallX, wallY), new Point(wallX, wallY-1));
+                notLinkedPoint.addEdge(new Point(wallX+1, wallY), new Point(wallX+1, wallY-1));
+            }
         }
     }
 
